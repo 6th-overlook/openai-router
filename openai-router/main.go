@@ -55,12 +55,12 @@ func getParameterFromSSM(parameterName string) (string, error) {
 
 func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
-	var gptRequest UserReq
-	err := json.Unmarshal([]byte(request.Body), gptRequest)
+	var userRequest UserReq
+	err := json.Unmarshal([]byte(request.Body), userRequest)
 
 	if err != nil {
 		return events.APIGatewayProxyResponse{
-			Body:       "Error in parsing JSON",
+			Body:       error.Error(),
 			StatusCode: 400,
 		}, nil
 	}

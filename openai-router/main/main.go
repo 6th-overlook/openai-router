@@ -56,11 +56,11 @@ func getParameterFromSSM(parameterName string) (string, error) {
 func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
 	var userRequest UserReq
-	err := json.Unmarshal([]byte(request.Body), userRequest)
+	err := json.Unmarshal([]byte(request.Body), &userRequest)
 
 	if err != nil {
 		return events.APIGatewayProxyResponse{
-			Body:       error.Error(),
+			Body:  err.Error(),
 			StatusCode: 400,
 		}, nil
 	}
@@ -78,7 +78,7 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		Model: "gpt-4",
 		Messages: []OpenAIMessage{
 			{Role: "system", Content: "You are a conversational companion intended converse actively with the user, asking questions and providing appropriate reponses to statements and questions"},
-			{Role: "user", Content: gptRequest.GptMessage}},
+			{Role: "user", Content: userRequest.GptMessage}},
 	}
 
 	openAIReqJSON, err := json.Marshal(openAIRequest)
